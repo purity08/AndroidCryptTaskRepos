@@ -19,5 +19,7 @@ class MainActivityViewModel @Inject constructor(): ViewModel() {
 
     @Provides
     @Singleton
-    fun recycler24hListData(): LiveData<ArrayList<IntervalData>> = DataInterfaceImpl().get24hData()
+    fun recycler24hListData(id: String, start: Long, end: Long):
+            LiveData<ArrayList<IntervalData>> =
+        DataInterfaceImpl().get24hData(id,start,end)
 }

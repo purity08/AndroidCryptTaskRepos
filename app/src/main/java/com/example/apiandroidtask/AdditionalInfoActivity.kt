@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toDrawable
 import com.example.apiandroidtask.DI.App
 import com.example.apiandroidtask.model.IntervalData
-import com.example.apiandroidtask.singleton.Singleton
 import com.example.apiandroidtask.viewmodel.MainActivityViewModel
 import com.squareup.picasso.Picasso
 import com.jjoe64.graphview.GraphView
@@ -38,8 +37,11 @@ class AdditionalInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_additional_info)
 
+        val itemName = intent.getStringExtra("name")
+        val itemSymbol = intent.getStringExtra("symbol")
+        val itemId = intent.getStringExtra("id")
 
-        viewModel.recycler24hListData()
+        viewModel.recycler24hListData(itemId!!, start, end)
             .observe(this, {
                 priceList = it
                 val graph = findViewById<GraphView>(R.id.graph)
@@ -93,15 +95,21 @@ class AdditionalInfoActivity : AppCompatActivity() {
         val nameView = findViewById<TextView>(R.id.cryptNameView)
         val symbolView = findViewById<ImageView>(R.id.cryptImageView)
 
-        nameView.text = Singleton.name
+
+
+        nameView.text = itemName
         val formatter = SimpleDateFormat("dd-MMMM-YYYY")
         dateView.text = formatter.format(Date(System.currentTimeMillis())).replace("-", " ")
 
         Picasso.get()
-            .load("https://static.coincap.io/assets/icons/${Singleton.symbol?.toLowerCase()}@2x.png")
+            .load("https://static.coincap.io/assets/icons/${itemSymbol?.toLowerCase()}@2x.png")
             .noPlaceholder()
             .error(R.drawable.ic_launcher_foreground)
             .fit()
             .into(symbolView)
+    }
+    private companion object {
+        val end = System.currentTimeMillis()
+        val start = end - ONE_DAY_IN_MILS
     }
 }

@@ -7,5 +7,5 @@ import com.example.apiandroidtask.model.IntervalData
 
 interface DataInterface {
     fun getData(): LiveData<ArrayList<RecyclerData>>
-    fun get24hData(): LiveData<ArrayList<IntervalData>>
+    fun get24hData(id: String, start: Long, end: Long): LiveData<ArrayList<IntervalData>>
 }

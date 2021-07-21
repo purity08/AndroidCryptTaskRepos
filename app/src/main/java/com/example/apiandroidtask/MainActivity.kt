@@ -53,15 +53,21 @@ class MainActivity : AppCompatActivity(), Adapter.OnItemClickListener {
             })
     }
 
+
     override fun onItemClick(position: Int, v: View?) {
         val clickedItem = list[position]
-        Singleton.id = clickedItem.id.toString()
-        Singleton.name = clickedItem.name.toString()
-        Singleton.symbol = clickedItem.symbol.toString()
+
+        val intent = Intent(this, AdditionalInfoActivity::class.java)
+
+        intent.putExtra("id",clickedItem.id)
+        intent.putExtra("name", clickedItem.name)
+        intent.putExtra("symbol", clickedItem.symbol)
+
+
         if (v != null) {
             v.isClickable = false
         }
-        startActivity(Intent(this, AdditionalInfoActivity::class.java))
+        startActivity(intent)
     }
 
 

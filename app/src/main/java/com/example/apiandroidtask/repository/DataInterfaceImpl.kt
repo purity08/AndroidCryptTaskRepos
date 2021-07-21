@@ -46,11 +46,11 @@ class DataInterfaceImpl : DataInterface {
         return liveData
     }
 
-    override fun get24hData(): LiveData<ArrayList<IntervalData>> {
+    override fun get24hData(id: String, start: Long, end: Long): LiveData<ArrayList<IntervalData>> {
 
         val live24hData = MutableLiveData<ArrayList<IntervalData>>()
 
-        apiService.get24hCryptList(Singleton.id, Singleton.start, Singleton.end)
+        apiService.get24hCryptList(id, start, end)
             .enqueue(object : Callback<CryptData> {
                 override fun onResponse(call: Call<CryptData>, response: Response<CryptData>) {
                     Log.d("onResponse", response.message())
