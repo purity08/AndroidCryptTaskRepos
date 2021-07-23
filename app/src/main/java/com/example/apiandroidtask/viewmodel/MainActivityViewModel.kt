@@ -3,8 +3,8 @@ package com.example.apiandroidtask.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.apiandroidtask.model.IntervalData
-import com.example.apiandroidtask.model.RecyclerData
-import com.example.apiandroidtask.repository.DataInterfaceImpl
+import com.example.apiandroidtask.model.Cryptocurrency
+import com.example.apiandroidtask.repository.DataImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Inject
@@ -15,11 +15,11 @@ class MainActivityViewModel @Inject constructor(): ViewModel() {
 
     @Provides
     @Singleton
-    fun recyclerListData(): LiveData<ArrayList<RecyclerData>> = DataInterfaceImpl().getData()
+    fun cryptList(): LiveData<ArrayList<Cryptocurrency>> = DataImpl().getCryptData()
 
     @Provides
     @Singleton
-    fun recycler24hListData(id: String, start: Long, end: Long):
+    fun cryptListWithInterval(id: String, start: Long, end: Long):
             LiveData<ArrayList<IntervalData>> =
-        DataInterfaceImpl().get24hData(id,start,end)
+        DataImpl().getCryptDataWithInterval(id,start,end)
 }

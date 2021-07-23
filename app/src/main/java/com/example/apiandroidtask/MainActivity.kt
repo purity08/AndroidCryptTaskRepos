@@ -9,16 +9,15 @@ import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import com.example.apiandroidtask.DI.App
 import com.example.apiandroidtask.adapter.Adapter
-import com.example.apiandroidtask.model.RecyclerData
-import com.example.apiandroidtask.singleton.Singleton
+import com.example.apiandroidtask.model.Cryptocurrency
 import com.example.apiandroidtask.viewmodel.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), Adapter.OnItemClickListener {
+class MainActivity : AppCompatActivity(R.layout.activity_main), Adapter.OnItemClickListener {
 
     private lateinit var recyclerViewAdapter: Adapter
-    private var list = arrayListOf<RecyclerData>()
+    private var cryptList = arrayListOf<Cryptocurrency>()
 
     @Inject
     lateinit var viewModel: MainActivityViewModel
@@ -28,41 +27,36 @@ class MainActivity : AppCompatActivity(), Adapter.OnItemClickListener {
         App.appComponent.inject(this)
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        setAdapter()
-        initializeUi()
+        initializeRecycler()
+        initializeList()
     }
 
-    private fun setAdapter() {
-        recycler.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-        }
+    private fun initializeRecycler() {
+        recycler.layoutManager = LinearLayoutManager(this@MainActivity)
         recyclerViewAdapter = Adapter(this, listOf(), this)
         recycler.adapter = recyclerViewAdapter
     }
 
-    private fun initializeUi() {
-
-        viewModel.recyclerListData()
+    private fun initializeList() {
+        viewModel.cryptList()
             .observe(this, Observer {
                 if (it != null) {
-                    list = it
-                    recyclerViewAdapter.setDataList(list)
+                    cryptList = it
+                    recyclerViewAdapter.setDataList(cryptList)
                 }
             })
     }
 
 
     override fun onItemClick(position: Int, v: View?) {
-        val clickedItem = list[position]
+        val clickedItem = cryptList[position]
 
         val intent = Intent(this, AdditionalInfoActivity::class.java)
 
-        intent.putExtra("id",clickedItem.id)
+        intent.putExtra("id", clickedItem.id)
         intent.putExtra("name", clickedItem.name)
         intent.putExtra("symbol", clickedItem.symbol)
-
 
         if (v != null) {
             v.isClickable = false

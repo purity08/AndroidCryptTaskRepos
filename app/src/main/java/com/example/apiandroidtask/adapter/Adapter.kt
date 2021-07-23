@@ -10,12 +10,12 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apiandroidtask.R
-import com.example.apiandroidtask.model.RecyclerData
+import com.example.apiandroidtask.model.Cryptocurrency
 import com.squareup.picasso.Picasso
 
 class Adapter(
     private val context: Context,
-    var list: List<RecyclerData>,
+    var list: List<Cryptocurrency>,
     private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<Adapter.ViewHolder>() {
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
@@ -39,7 +39,7 @@ class Adapter(
         fun onItemClick(position: Int, v: View?)
     }
 
-    fun setDataList(data: List<RecyclerData>) {
+    fun setDataList(data: List<Cryptocurrency>) {
         list = data
         notifyDataSetChanged()
     }
@@ -55,10 +55,10 @@ class Adapter(
         val change: String = String.format("%.2f", data.changePercent24Hr?.toFloat())
         if (change.startsWith("-")) {
             holder.changePercent24Hr.setTextColor(Color.RED)
-            holder.changePercent24Hr.text = "${change}%"
+            holder.changePercent24Hr.text = "$change%"
         } else {
             holder.changePercent24Hr.setTextColor(Color.GREEN)
-            holder.changePercent24Hr.text = "+${change}%"
+            holder.changePercent24Hr.text = "+$change%"
         }
 
         holder.name.text = data.name
@@ -70,6 +70,7 @@ class Adapter(
         } else {
             holder.recyclerView.setBackgroundColor(Color.parseColor("#161a1d"))
         }
+
         Picasso.get()
             .load("https://static.coincap.io/assets/icons/${data.symbol?.toLowerCase()}@2x.png")
             .noPlaceholder()

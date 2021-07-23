@@ -20,10 +20,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.activity_additional_info.*
 
 const val ONE_DAY_IN_MILS = 86400000L
 
-class AdditionalInfoActivity : AppCompatActivity() {
+class AdditionalInfoActivity : AppCompatActivity(R.layout.activity_additional_info) {
 
     private lateinit var priceList: ArrayList<IntervalData>
 
@@ -35,16 +36,14 @@ class AdditionalInfoActivity : AppCompatActivity() {
         App.appComponent.inject(this)
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_additional_info)
 
         val itemName = intent.getStringExtra("name")
         val itemSymbol = intent.getStringExtra("symbol")
         val itemId = intent.getStringExtra("id")
 
-        viewModel.recycler24hListData(itemId!!, start, end)
+        viewModel.cryptListWithInterval(itemId!!, intervalStart, intervalEnd)
             .observe(this, {
                 priceList = it
-                val graph = findViewById<GraphView>(R.id.graph)
 
                 val pricesArrayList = arrayListOf<DataPoint>()
 
@@ -56,13 +55,13 @@ class AdditionalInfoActivity : AppCompatActivity() {
                         )
                     )
                 }
-                val formate = SimpleDateFormat("HH")
+                val format = SimpleDateFormat("HH")
 
                 var l = priceList[0].time?.toLong()!!
 
                 val dateArrayList = arrayListOf<String>()
                 for (i in 0..7) {
-                    dateArrayList.add(formate.format(l) + ":00")
+                    dateArrayList.add(format.format(l) + ":00")
                     l += 12340800
                 }
                 val series = LineGraphSeries(pricesArrayList.toTypedArray())
@@ -81,24 +80,14 @@ class AdditionalInfoActivity : AppCompatActivity() {
                 val lowPrice = series.lowestValueY
                 val avgPrice = (highPrice + lowPrice) / 2
 
-                val highPriceView = findViewById<TextView>(R.id.highPriceView)
                 highPriceView.text = "$${String.format("%.4f", highPrice)}"
-
-                val lowPriceView = findViewById<TextView>(R.id.lowPriceView)
                 lowPriceView.text = "$${String.format("%.4f", lowPrice)}"
-
-                val avgPriceView = findViewById<TextView>(R.id.avgPriceView)
                 avgPriceView.text = "$${String.format("%.4f", avgPrice)}"
+
             })
 
-        val dateView = findViewById<TextView>(R.id.dateView)
-        val nameView = findViewById<TextView>(R.id.cryptNameView)
-        val symbolView = findViewById<ImageView>(R.id.cryptImageView)
-
-
-
-        nameView.text = itemName
         val formatter = SimpleDateFormat("dd-MMMM-YYYY")
+        cryptNameView.text = itemName
         dateView.text = formatter.format(Date(System.currentTimeMillis())).replace("-", " ")
 
         Picasso.get()
@@ -106,10 +95,11 @@ class AdditionalInfoActivity : AppCompatActivity() {
             .noPlaceholder()
             .error(R.drawable.ic_launcher_foreground)
             .fit()
-            .into(symbolView)
+            .into(cryptImageView)
     }
+
     private companion object {
-        val end = System.currentTimeMillis()
-        val start = end - ONE_DAY_IN_MILS
+        val intervalEnd = System.currentTimeMillis()
+        val intervalStart = intervalEnd - ONE_DAY_IN_MILS
     }
 }

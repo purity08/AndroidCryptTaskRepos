@@ -2,15 +2,15 @@ package com.example.apiandroidtask.DI
 
 import com.example.apiandroidtask.AdditionalInfoActivity
 import com.example.apiandroidtask.MainActivity
-import com.example.apiandroidtask.repository.DataInterfaceImpl
+import com.example.apiandroidtask.repository.DataImpl
 import com.example.apiandroidtask.viewmodel.MainActivityViewModel
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [RestModule::class, AppModule::class, MainActivityViewModel::class])
+@Component(modules = [RestModule::class, MainActivityViewModel::class])
 interface AppComponent {
     fun inject(mainActivity: MainActivity)
     fun inject(additionalInfoActivity: AdditionalInfoActivity)
-    fun inject(dataInterface: DataInterfaceImpl)
+    fun inject(dataInterface: DataImpl)
 }
